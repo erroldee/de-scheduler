@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            {{ location }} - Notifications
+        </ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="dismiss()">
+                <span ion-text color="primary" showWhen="ios">Cancel</span>
+                <ion-icon name="close" showWhen="android,windows,core"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-list radio-group [(ngModel)]="selectedInfo" (ionChange)="onSelectedInfo()">
+        <ion-item>
+            <ion-label>Enable Notifications</ion-label>
+            <ion-toggle [(ngModel)]="enableNotifications" (ionChange)="toggleNotification()"></ion-toggle>
+        </ion-item>
+        <ion-item *ngFor="let info of infoMap">
+            <ion-label>{{ info.name }}</ion-label>
+            <ion-radio [value]="info.id" [disabled]="!enableNotifications" [checked]="selectedInfo === info.id"></ion-radio>
+        </ion-item>
+    </ion-list>
+</ion-content>

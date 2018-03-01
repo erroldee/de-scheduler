@@ -1,0 +1,38 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title start>Hoteling - Quezon City</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="onShowNotification()">
+                <ion-icon name="notifications"></ion-icon>
+            </button>
+            <button ion-button icon-only (click)="onShareQc()">
+                <ion-icon name="share-alt"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding show-on-scroll="scroll-fab-qc">
+    <ion-fab right bottom id="scroll-fab-qc">
+        <button ion-fab (click)="onScrollTop()"><ion-icon name="arrow-dropup"></ion-icon></button>
+    </ion-fab>
+    <ion-item>
+        <ion-label>Filter</ion-label>
+        <ion-select [(ngModel)]="listFilter" (ionChange)="onSelectChange($event)">
+            <ion-option value="ALL">ALL</ion-option>
+            <ion-option *ngFor="let data of empData; let empIdx = index" [value]="empIdx">{{ data.name }}</ion-option>
+        </ion-select>
+    </ion-item>
+    <ng-container *ngFor="let cardData of qcData">
+        <ion-card *ngIf="(listFilter === 'ALL' || listFilter == cardData.empId)">
+            <ion-item [ngClass]="{'highlight': cardData.today}">
+                <img width="50" height="50" [src]="cardData.img" item-left />
+                <p>{{ cardData.dayToday.toDateString() }}</p>
+                <p>{{ cardData.name }}</p>
+            </ion-item>
+        </ion-card>
+    </ng-container>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" [enabled]="allowInfinite">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>
