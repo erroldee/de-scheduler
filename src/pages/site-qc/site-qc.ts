@@ -1,58 +1,50 @@
 import { Component } from '@angular/core';
 import * as $ from 'jquery';
-import {CreateScheduleService} from "../../shared/services/create-schedule.service";
 import {CardInfo} from "../../shared/interface/card-info.interface";
-import {CONSTANTS} from "../../shared/constants";
 import {DATA_QC} from "../../data/data-qc";
-import {SocialSharing} from "@ionic-native/social-sharing";
 import {ModalController} from "ionic-angular";
 import {ModalNotificationPage} from "../modal-notification/modal-notification";
-import {InfoMapping} from "../../shared/interface/info-mapping.interface";
+import {SessionService} from "../../shared/services/session.service";
+import {HomeBasePage} from "../home-base/home-base";
 
 @Component({
     selector: 'page-site-qc',
     templateUrl: 'site-qc.html',
 })
 export class SiteQcPage {
-    qcData: CardInfo[] = [];
-    qcBulk: CardInfo[] = [];
+    qcData: any[] = [];
+    qcBulk: any[] = [];
+    dataInfo: {[n: number]: CardInfo} = {};
     qcPlaceHolder: number = 0;
     displayLimit: number = 10;
-    allowInfinite: boolean = true;
     empData: any;
     listFilter: string = "ALL";
-    forShare: string[] = [];
-    qcMapping: {[s: string]: number} = {};
-    infoMap: InfoMapping[] = [];
 
     constructor(
-        _createScheduleService: CreateScheduleService,
-        private _socialSharingService: SocialSharing,
-        private _modalCtrl: ModalController
+        private _modalCtrl: ModalController,
+        private _sessionService: SessionService
     ) {
         this.empData = DATA_QC;
-        this.qcBulk = _createScheduleService.getSchedule(CONSTANTS.QC_START_DATE, DATA_QC, CONSTANTS.QC_LIMIT);
-
-        const maxCounter = 15;
-
-        for (let counter = 0; counter < maxCounter; counter++) {
-            if (this.qcMapping[this.qcBulk[counter].empId] === undefined) {
-                this.qcMapping[this.qcBulk[counter].empId] = this.infoMap.length;
-                this.infoMap.push({
-                    id: this.qcBulk[counter].empId,
-                    name: this.qcBulk[counter].name,
-                    notifications: []
-                });
-            }
-
-            if (this.infoMap[this.qcMapping[this.qcBulk[counter].empId]].notifications.length < maxCounter) {
-                let notifDate = new Date(this.qcBulk[counter].dayToday);
-                this.infoMap[this.qcMapping[this.qcBulk[counter].empId]].notifications.push(notifDate);
-            }
-        }
+        this.qcBulk = this._sessionService.qcBulk;
+        this.dataInfo = this._sessionService.wfhMapped;
     }
 
     ionViewWillEnter() {
+        this.onSelectChange(this.listFilter);
+    }
+
+    onSelectHome() {
+        const modal = this._modalCtrl.create(HomeBasePage);
+        modal.present();
+    }
+
+    onSelectChange(selectedValue: any) {
+        if (selectedValue === 'ALL') {
+            this.qcBulk = this._sessionService.qcBulk;
+        } else {
+            this.qcBulk = this.dataInfo[selectedValue].notifications;
+        }
+
         this.qcData = [];
         this.qcPlaceHolder = 0;
         this.addData();
@@ -60,27 +52,17 @@ export class SiteQcPage {
     }
 
     onShowNotification() {
-        const modal = this._modalCtrl.create(ModalNotificationPage, {
-            location: "QC",
-            mapData: this.infoMap
-        });
+        const modal = this._modalCtrl.create(ModalNotificationPage);
         modal.present();
     }
 
     addData() {
         for (let counter = 0; counter < this.displayLimit; counter++) {
             if (this.qcBulk[this.qcPlaceHolder]) {
-                if (this.qcBulk[this.qcPlaceHolder].today) {
-                    this.forShare.push(this.qcBulk[this.qcPlaceHolder].name);
-                }
                 this.qcData.push(this.qcBulk[this.qcPlaceHolder]);
                 this.qcPlaceHolder++;
             }
         }
-    }
-
-    onSelectChange(selectedValue: any) {
-        this.allowInfinite = (selectedValue === 'ALL');
     }
 
     doInfinite(infiniteScroll) {
@@ -98,35 +80,5 @@ export class SiteQcPage {
         $('page-site-qc div.scroll-content').animate({
             scrollTop: 0
         }, 500);
-    }
-
-    onShareQc() {
-        let shareMsg: string = "Nobody is scheduled to do hoteling today for QC.";
-
-        if (this.forShare.length > 0) {
-            shareMsg = "QC hoteling scheduled for today";
-
-            shareMsg += (this.forShare.length > 1) ? " are " : " is ";
-
-            for (let counter = 0; counter < this.forShare.length; counter++) {
-                if (counter === 0) {
-                    shareMsg += this.forShare[counter];
-                } else if (counter === (this.forShare.length - 1)) {
-                    shareMsg += ", and " + this.forShare[counter];
-                } else {
-                    shareMsg += ", " + this.forShare[counter];
-                }
-            }
-
-            shareMsg += ".";
-        }
-
-        this._socialSharingService
-            .share(shareMsg, "QC Hoteling", "./assets/imgs/share-icon.png", null)
-            .then(() => {
-                console.log('Success!');
-            }).catch(() => {
-                console.log('Error!');
-            });
     }
 }

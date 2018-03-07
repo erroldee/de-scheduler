@@ -14,19 +14,28 @@ import {IonicStorageModule} from "@ionic/storage";
 import {CreateScheduleService} from "../shared/services/create-schedule.service";
 import {SetNotificationsService} from "../shared/services/set-notifications.service";
 import {LocalNotifications} from "@ionic-native/local-notifications";
-import {SocialSharing} from "@ionic-native/social-sharing";
+import {SessionService} from "../shared/services/session.service";
+import {ModalNotificationPageModule} from "../pages/modal-notification/modal-notification.module";
+import {SiteMckPageModule} from "../pages/site-mck/site-mck.module";
+import {SiteQcPageModule} from "../pages/site-qc/site-qc.module";
+import {FCM} from "@ionic-native/fcm";
+import {PushNotificationService} from "../shared/services/push-notification.service";
+import {DefaultHomeService} from "../shared/services/default-home.service";
+import {HomeBasePageModule} from "../pages/home-base/home-base.module";
+import {HomeBasePage} from "../pages/home-base/home-base";
 
 @NgModule({
     declarations: [
         MyApp,
         TabSitesPage,
-        SiteMckPage,
-        SiteQcPage,
-        ModalNotificationPage,
         ShowOnScrollDirective
     ],
     imports: [
         BrowserModule,
+        ModalNotificationPageModule,
+        SiteMckPageModule,
+        SiteQcPageModule,
+        HomeBasePageModule,
         IonicModule.forRoot(MyApp),
         IonicStorageModule.forRoot()
     ],
@@ -36,7 +45,8 @@ import {SocialSharing} from "@ionic-native/social-sharing";
         TabSitesPage,
         SiteMckPage,
         SiteQcPage,
-        ModalNotificationPage
+        ModalNotificationPage,
+        HomeBasePage
     ],
     providers: [
         StatusBar,
@@ -46,9 +56,12 @@ import {SocialSharing} from "@ionic-native/social-sharing";
             useClass: IonicErrorHandler
         },
         CreateScheduleService,
-        SocialSharing,
         SetNotificationsService,
-        LocalNotifications
+        LocalNotifications,
+        SessionService,
+        FCM,
+        PushNotificationService,
+        DefaultHomeService
     ]
 })
 export class AppModule {}

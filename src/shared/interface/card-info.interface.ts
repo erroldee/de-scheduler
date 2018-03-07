@@ -1,7 +1,8 @@
 export interface CardInfo {
-    today: boolean,
-    dayToday: any,
-    empId: number,
+    today?: boolean,
+    dayToday?: any,
+    id?: number,
     img: string,
-    name: string
+    name: string,
+    notifications?: any[]
 }

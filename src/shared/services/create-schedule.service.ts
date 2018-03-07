@@ -5,7 +5,7 @@ import {CardInfo} from "../interface/card-info.interface";
 @Injectable()
 export class CreateScheduleService {
     getDates(startDate) {
-        let endDate = (new Date().getMonth() > 10)
+        let endDate = (new Date().getMonth() < 9)
                 ? new Date(new Date().getFullYear(), 11, 31)
                 : new Date(new Date().getFullYear() + 1, 6, 30),
             dates = [],
@@ -68,13 +68,13 @@ export class CreateScheduleService {
 
                 for (let k = 0; k < limit; k++) {
                     if (isToday || (!isToday && (arrayOfDates[i] > currentDate))) {
-						arrayOfDates[i].setHours(15);
+						arrayOfDates[i].setHours(10);
                         arrayOfDates[i].setMinutes(1);
 
                         schedule.push({
                             today: isToday,
                             dayToday: arrayOfDates[i],
-                            empId: counter,
+                            id: empList[counter].id,
                             img: empList[counter].img,
                             name: empList[counter].name
                         });
