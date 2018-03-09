@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "727707768416",
+    "firebase_url": "https://de-scheduler.firebaseio.com",
+    "project_id": "de-scheduler",
+    "storage_bucket": "de-scheduler.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727707768416:android:5ce399ac99247fd2",
+        "android_client_info": {
+          "package_name": "com.erroldee.descheduler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727707768416-d7srnbcd3a3at403o6is93ns3i5rrdeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5DJTmPCGzdw9tXomcz3YGZIUhQxVVj8U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

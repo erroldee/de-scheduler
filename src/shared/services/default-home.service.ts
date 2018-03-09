@@ -18,11 +18,14 @@ export class DefaultHomeService {
     getHome(callback?: any){
         this._storage.get('homebase').then(
             base => {
-                if (base)
+                if (base) {
                     this._sessionService.homeBase = base;
+                } else {
+                    this._sessionService.homeBase = "MCK";
+                }
 
                 if (callback)
-                    callback(base);
+                    callback(this._sessionService.homeBase);
             }
         );
     }

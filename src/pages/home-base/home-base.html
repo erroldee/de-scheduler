@@ -1,0 +1,23 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Home Base
+        </ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="dismiss()">
+                <span ion-text color="primary" showWhen="ios">Cancel</span>
+                <ion-icon name="close" showWhen="android,windows,core"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-list radio-group [(ngModel)]="selectedBase" (ionChange)="onSelectedBase()">
+        <ion-item *ngFor="let base of baseOptions">
+            <ion-label>{{ base }}</ion-label>
+            <ion-radio [value]="base" [checked]="selectedBase === base"></ion-radio>
+        </ion-item>
+    </ion-list>
+</ion-content>
